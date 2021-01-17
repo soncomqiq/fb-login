@@ -1,23 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const handleUser = () => {
+    window.FB.api('/me', function (res) {
+      console.log("TOKEN =>>", window.FB.getAccessToken());
+      console.log('Good to see you, ' + res.name + '.');
+    });
+  }
+
+  const onClickFB = () => {
+    window.FB.getLoginStatus(function (response) {
+      console.log(response)
+      if (response.status === "connected") {
+        handleUser()
+      } else {
+        window.FB.login(function (response) {
+          handleUser()
+        });
+      }
+    });
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={onClickFB}>LOGIN LOGIN</button>
     </div>
   );
 }
